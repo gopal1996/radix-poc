@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "umd",
+    "lib": ["ESNext", "dom"],
+    "jsx": "react",
+    "noEmit": true,
+    "sourceMap": true,
+
+    // Strict Type-checking Options
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+
+    // Module Resolution Options
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true
+  },
+  "include": ["src"]
+}

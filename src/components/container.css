@@ -1,0 +1,15 @@
+.children {
+  padding: 2.5rem 2rem;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  margin: 1rem;
+  text-align: center;
+}
+
+.title {
+  margin-bottom: 14px;
+}

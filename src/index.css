@@ -1,0 +1,25 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.ui-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ui-components {
+  flex-grow: 1;
+}
+
+.ui-control {
+  flex-basis: 20%;
+  padding: 1rem 1.2rem;
+}
+
+:focus-visible {
+  outline: none;
+}
