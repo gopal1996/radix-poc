@@ -40,6 +40,10 @@
   background: #eef3f9;
 }
 
+.SelectItem:focus {
+  background: #eef3f9;
+}
+
 .SelectItemIndicator {
   position: absolute;
   right: 0;

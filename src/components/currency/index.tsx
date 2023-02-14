@@ -49,7 +49,7 @@ export const Currency = ({ currencyTypes, value = "123", onChange }: CurrencyPro
           </Select.Trigger>
 
           <Select.Portal>
-            <Select.Content className="SelectContent" position="popper">
+            <Select.Content className="SelectContent">
               <Select.ScrollUpButton className="SelectScrollButton">
                 <ChevronUpIcon />
               </Select.ScrollUpButton>

@@ -1,5 +1,9 @@
 import React from "react";
 import { useMultipleSelection, useCombobox } from "downshift";
+import * as Popover from "@radix-ui/react-popover";
+import cx from "classnames";
+
+import "./style.css";
 
 type MultiSelctProps = {
   items: Array<string | {}>;
@@ -66,10 +70,12 @@ export function MultiSelect(props: MultiSelctProps) {
         case useCombobox.stateChangeTypes.InputKeyDownEnter:
         case useCombobox.stateChangeTypes.ItemClick:
           onSelect([...selectedItems, newSelectedItem]);
+          onFilter("");
           break;
 
         case useCombobox.stateChangeTypes.InputChange:
           setInputValue(newInputValue);
+          onFilter(newInputValue);
           break;
 
         default:
@@ -78,65 +84,68 @@ export function MultiSelect(props: MultiSelctProps) {
     },
   });
 
+  console.log("isOpen", isOpen);
+
   return (
-    <div className="MultiSelect">
-      <div className="MultiSelect SelectedItems">
-        {selectedItems.map(function renderSelectedItem(selectedItemForRender, index) {
-          return (
-            <span
-              className="bg-gray-100 rounded-md px-1 focus:bg-red-400"
-              key={`selected-item-${index}`}
-              {...getSelectedItemProps({
-                selectedItem: selectedItemForRender,
-                index,
-              })}
-            >
-              {selectedItemForRender.title}
-              <span
-                className="px-1 cursor-pointer"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  removeSelectedItem(selectedItemForRender);
-                }}
-              >
-                &#10005;
-              </span>
-            </span>
-          );
-        })}
-        <input
-          placeholder="Best book ever"
-          className="w-full"
-          aria-label="toggle menu"
-          {...getToggleButtonProps()}
-          {...getInputProps(getDropdownProps({ preventKeyAction: isOpen }))}
-        />
-      </div>
-      {isOpen && (
-        <ul
-          className={`absolute w-inherit bg-white mt-1 shadow-md max-h-80 overflow-scroll p-0 ${
-            !(isOpen && items.length) && "hidden"
-          }`}
-          {...getMenuProps()}
-        >
-          {isOpen &&
-            items.map((item, index) => (
-              <li
-                className={cx(
-                  highlightedIndex === index && "bg-blue-300",
-                  selectedItem === item && "font-bold",
-                  "py-2 px-3 shadow-sm flex flex-col"
-                )}
-                key={`${item.value}${index}`}
-                {...getItemProps({ item, index })}
-              >
-                <span>{item.title}</span>
-                <span className="text-sm text-gray-700">{item.author}</span>
-              </li>
-            ))}
-        </ul>
-      )}
-    </div>
+    <React.Fragment>
+      <Popover.Root className="MultiSelect" open={isOpen}>
+        <Popover.Trigger asChild>
+          <div className="SelectedItemList">
+            {selectedItems.map(function renderSelectedItem(selectedItemForRender, index) {
+              return (
+                <span
+                  className="SelectedItem"
+                  key={`selected-item-${index}`}
+                  {...getSelectedItemProps({
+                    selectedItem: selectedItemForRender,
+                    index,
+                  })}
+                >
+                  {selectedItemForRender.title}
+                  <span
+                    className="px-1 cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeSelectedItem(selectedItemForRender);
+                    }}
+                  >
+                    &#10005;
+                  </span>
+                </span>
+              );
+            })}
+            <input
+              placeholder="Best book ever"
+              className="SearchBox"
+              aria-label="toggle menu"
+              // {...getToggleButtonProps()}
+              {...getInputProps(getDropdownProps({ preventKeyAction: isOpen }))}
+            />
+          </div>
+        </Popover.Trigger>
+        <Popover.Portal>
+          <Popover.Content asChild>
+            <ul className="ItemsList" {...getMenuProps()} tabIndex={-1}>
+              {isOpen &&
+                items.map((item, index) => (
+                  <li
+                    className={cx(
+                      highlightedIndex === index && "HightlightedItem",
+                      selectedItem === item && "Bold",
+                      "Item"
+                    )}
+                    key={`${item.value}${index}`}
+                    {...getItemProps({ item, index })}
+                  >
+                    <span>{item.title}</span>
+                    <span className="text-sm text-gray-700">{item.author}</span>
+                  </li>
+                ))}
+            </ul>
+          </Popover.Content>
+        </Popover.Portal>
+      </Popover.Root>
+    </React.Fragment>
   );
 }
 
@@ -153,21 +162,34 @@ export function MultiSelectExample() {
     { author: "Lev Tolstoy", title: "Anna Karenina" },
     { author: "Fyodor Dostoevsky", title: "Crime and Punishment" },
   ];
+  const [items, setItems] = React.useState(books);
+  const [selectedItem, setSelectedItems] = React.useState([books[0], books[1]]);
 
   const onSelect = (selectedItems: Array<{ author: string; title: string }>) => {
     console.log("selected Items ", selectedItems);
+    setSelectedItems(selectedItems);
   };
 
-  const onFilter = (searchText: string) => {
-    console.log("on filter ", searchText);
-  };
+  function getFilteredBooks(inputValue: string) {
+    console.log("filter is calling ", inputValue);
+    const lowerCasedInputValue = inputValue.toLowerCase();
+
+    const filteredBooks = books.filter(function filterBook(book) {
+      return (
+        // !selectedItem.filter((b) => b.title == book.title) &&
+        book.title.toLowerCase().includes(lowerCasedInputValue) ||
+        book.author.toLowerCase().includes(lowerCasedInputValue)
+      );
+    });
+    setItems(filteredBooks);
+  }
 
   return (
     <MultiSelect
-      items={books}
-      selectedItems={[books[0], books[1]]}
+      items={items}
+      selectedItems={selectedItem}
       onSelect={onSelect}
-      onFilter={onFilter}
+      onFilter={getFilteredBooks}
     ></MultiSelect>
   );
 }

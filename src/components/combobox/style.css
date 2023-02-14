@@ -1,0 +1,49 @@
+.MultiSelect {
+  padding: 4px;
+  width: 400px;
+  height: auto;
+  outline: 1px solid black;
+}
+
+.SelectedItemList {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.SelectedItem {
+  padding: 3px;
+  background-color: goldenrod;
+}
+
+.SelectedItem:focus {
+  background: orchid;
+  outline: 1px solid lightblue;
+}
+
+.SearchBox {
+  /* width: 100%; */
+  height: 100%;
+  all: unset;
+  text-align: left;
+}
+
+.ItemsList {
+  background: white;
+  border-radius: 5px;
+  padding: 5px;
+  box-shadow: 0 0 3px;
+}
+
+.HightlightedItem {
+  background-color: cadetblue;
+}
+
+.Item {
+  display: flex;
+  gap: 10px;
+}
+
+.Bold {
+  font-weight: bold;
+}

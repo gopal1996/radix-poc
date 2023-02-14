@@ -21,12 +21,12 @@ export const App = () => {
         <Container title="Currency">
           <Currency currencyTypes={currencyList} value="56" onChange={onCurrencyChange} />
         </Container>
+        <Container title="Slider">
+          <MultiSelectExample />
+        </Container>
       </div>
       <div className="ui-control">
         <Controller />
-      </div>
-      <div>
-        <MultiSelectExample />
       </div>
     </div>
   );
